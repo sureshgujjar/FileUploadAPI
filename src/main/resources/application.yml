@@ -1,0 +1,5 @@
+spring:
+ data:
+  mongodb:
+   uri: mongodb+srv://suri:9610389885@cluster0.pw3scij.mongodb.net/?retryWrites=true&w=majority
+   database: Files	
