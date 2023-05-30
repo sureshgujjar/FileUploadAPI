@@ -3,11 +3,15 @@ package com.suri.fileupload.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,15 +107,32 @@ public class FileService extends FileLocation{
 	{
 		return this.repo.findAll();
 	}
-	public boolean removeFile(String id)
+	public boolean removeFile(String id) throws IOException
 	{
+	   
+		
 		 boolean flag=false;
 		if(this.repo.existsById(id));
 		{
-			this.repo.deleteById(id);
-			flag=true;
+			FileInfo fileInfo=this.repo.findFirstById(id);
+	        String fileLoc=fileInfo.getFileLocation();
+	        Path path = Paths.get(fileLoc);
+	        if(path.toFile().delete())
+	        {
+	        	this.repo.deleteById(id);
+				flag=true;
+	        	
+	        }
 		}
 		
 			return flag;
+	}
+	public Resource getFile(String id) throws MalformedURLException
+	{
+		FileInfo fileInfo=this.repo.findFirstById(id);
+		String fileLoc=fileInfo.getFileLocation();
+		Resource resource=new UrlResource(Paths.get(fileLoc).toAbsolutePath().toUri());
+//		System.out.println(resource);
+		return resource;
 	}
 }
