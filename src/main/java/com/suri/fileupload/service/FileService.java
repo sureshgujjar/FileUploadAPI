@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -105,7 +106,7 @@ public class FileService extends FileLocation{
 	}
 	public List<FileInfo> getFiles()
 	{
-		return this.repo.findAll();
+		return this.repo.findAll(Sort.by(Sort.Direction.ASC,"_id"));
 	}
 	public boolean removeFile(String id) throws IOException
 	{
